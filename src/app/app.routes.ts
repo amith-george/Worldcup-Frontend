@@ -4,6 +4,8 @@ import { Register } from './pages/register/register';
 import { AdminDashboard } from './pages/admin-dashboard/admin-dashboard';
 import { Leaderboard } from './pages/leaderboard/leaderboard';
 import { PollManagement } from './pages/poll-management/poll-management';
+import { UserDashboard } from './pages/user-dashboard/user-dashboard';
+import { UserPoll } from './pages/user-poll/user-poll';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -11,5 +13,7 @@ export const routes: Routes = [
   { path: 'admin-dashboard', component: AdminDashboard },
   { path: 'leaderboard/:pollId', component: Leaderboard },
   { path: 'admin-poll-management', component: PollManagement },
+  { path: 'user-dashboard', component: UserDashboard },
+  { path: 'user-poll/:pollId', component: UserPoll },
   { path: '', redirectTo: '/login', pathMatch: 'full' }
 ];
