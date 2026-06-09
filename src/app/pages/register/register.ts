@@ -24,8 +24,11 @@ export class Register {
   ) {
     this.registerForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
+      confirmPassword: ['', [Validators.required]],
+      isAdmin: [false],
+      adminSecret: ['']
     }, { validators: this.passwordMatchValidator });
   }
 
@@ -44,13 +47,16 @@ export class Register {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Use only username and password for registration API
+    // Use username, email, and password for registration API
     const data = {
       username: this.registerForm.value.username,
+      email: this.registerForm.value.email,
       password: this.registerForm.value.password
     };
+    
+    const adminSecret = this.registerForm.value.isAdmin ? this.registerForm.value.adminSecret : undefined;
 
-    this.authService.register(data).subscribe({
+    this.authService.register(data, adminSecret).subscribe({
       next: () => {
         this.isLoading = false;
         this.successMessage = "Registration successful! Redirecting to login...";

@@ -22,7 +22,10 @@ export class AuthService {
     this.loadUserFromToken();
   }
 
-  register(data: any): Observable<any> {
+  register(data: any, adminSecret?: string): Observable<any> {
+    if (adminSecret) {
+      return this.http.post(`${this.apiUrl}/register-admin?secretKey=${encodeURIComponent(adminSecret)}`, data);
+    }
     return this.http.post(`${this.apiUrl}/register`, data);
   }
 

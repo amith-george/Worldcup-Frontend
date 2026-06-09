@@ -22,7 +22,7 @@ export class Login {
     private router: Router
   ) {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
@@ -39,7 +39,12 @@ export class Login {
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         this.isLoading = false;
-        this.router.navigate(['/']); // Route to dashboard/teams later
+        const currentUser = this.authService.currentUser();
+        if (currentUser?.role === 'Admin') {
+          this.router.navigate(['/admin-dashboard']);
+        } else {
+          this.router.navigate(['/']); // Route to dashboard/teams later
+        }
       },
       error: (err) => {
         this.isLoading = false;

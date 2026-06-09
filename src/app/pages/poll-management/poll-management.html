@@ -1,0 +1,66 @@
+<div class="p-6 max-w-4xl mx-auto">
+  <div class="flex items-center gap-4 mb-6">
+    <button (click)="goBack()" class="inline-flex items-center px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none transition-colors">
+      <svg class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back
+    </button>
+    <h2 class="text-2xl font-bold text-gray-900 m-0">Poll Management</h2>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+    <h3 class="text-lg font-medium text-gray-900 mb-4">Start New Poll</h3>
+    <form [formGroup]="pollForm" (ngSubmit)="startNewPoll()" class="flex gap-4 items-end">
+      <div class="flex-1">
+        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Poll Title</label>
+        <input 
+          type="text" 
+          id="title" 
+          formControlName="title"
+          class="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-900 focus:ring-2 focus:ring-gray-900"
+          placeholder="e.g. World Cup 2026 Finals"
+        />
+      </div>
+      <button 
+        type="submit" 
+        [disabled]="pollForm.invalid || isSubmitting"
+        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 h-[42px]"
+      >
+        <span *ngIf="!isSubmitting">Start New Poll</span>
+        <span *ngIf="isSubmitting">Starting...</span>
+      </button>
+    </form>
+    <p class="text-sm text-gray-500 mt-2">Starting a new poll will set all existing polls to inactive and create a fresh voting board.</p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="px-6 py-4 border-b border-gray-200">
+      <h3 class="text-lg font-medium text-gray-900">Poll History</h3>
+    </div>
+    
+    <div *ngIf="isLoading" class="p-8 text-center text-gray-500">
+      Loading polls...
+    </div>
+
+    <ul *ngIf="!isLoading" class="divide-y divide-gray-200">
+      <li *ngFor="let poll of polls" class="p-6 flex items-center justify-between hover:bg-gray-50">
+        <div>
+          <p class="text-lg font-medium text-gray-900">{{ poll.title }}</p>
+          <p class="text-sm text-gray-500">Created on {{ poll.createdAt | date:'medium' }}</p>
+        </div>
+        <div>
+          <span *ngIf="poll.isActive" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+            Active
+          </span>
+          <span *ngIf="!poll.isActive" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+            Inactive
+          </span>
+        </div>
+      </li>
+      <li *ngIf="polls.length === 0" class="p-8 text-center text-gray-500">
+        No polls found.
+      </li>
+    </ul>
+  </div>
+</div>
