@@ -59,37 +59,45 @@
     </div>
 
     <!-- Results State -->
-    <div *ngIf="!isLoading && !errorMessage" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <ul class="divide-y divide-gray-200">
-        <li *ngFor="let team of results; let i = index" class="p-6 hover:bg-gray-50 transition-colors relative group">
-          <div class="flex items-center space-x-6">
-            <div class="flex-shrink-0 w-8 text-center">
-              <span class="text-2xl font-bold text-gray-400" [ngClass]="{'text-yellow-500': i === 0, 'text-gray-400': i === 1, 'text-amber-600': i === 2}">
-                #{{ i + 1 }}
-              </span>
-            </div>
-            <div class="flex-shrink-0 h-16 w-16 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border border-gray-200">
-              <img [src]="getLogoUrl(team.logoUrl)" alt="{{ team.teamName }} logo" class="h-12 w-12 object-contain" *ngIf="team.logoUrl" />
-              <span *ngIf="!team.logoUrl" class="text-gray-400 font-medium text-lg">{{ team.teamName.charAt(0) }}</span>
-            </div>
-            <div class="flex-1 min-w-0">
-              <p class="text-xl font-bold text-gray-900 truncate">{{ team.teamName }}</p>
-            </div>
-            <div class="flex-shrink-0 bg-indigo-50 px-4 py-2 rounded-lg mr-4">
-              <p class="text-lg font-semibold text-indigo-700">{{ team.voteCount }} <span class="text-sm font-medium text-indigo-500">votes</span></p>
-            </div>
-            <button 
-              *ngIf="isAdmin"
-              (click)="deleteTeam(team.id, $event)"
-              class="opacity-0 group-hover:opacity-100 transition-opacity p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full focus:outline-none"
-              title="Delete Team">
-              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
+    <div *ngIf="!isLoading && !errorMessage" class="mt-6">
+      <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <div *ngFor="let team of results; let i = index" 
+             class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow relative group flex flex-col items-center p-6">
+          
+          <!-- Delete Button (Admin Only, visible on hover) -->
+          <button 
+            *ngIf="isAdmin"
+            (click)="deleteTeam(team.id, $event)"
+            class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full focus:outline-none"
+            title="Delete Team">
+            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+
+          <!-- Rank Indicator -->
+          <div class="absolute top-4 left-4">
+            <span class="text-xl font-bold" 
+                  [ngClass]="{'text-yellow-500': i === 0, 'text-gray-400': i === 1, 'text-amber-600': i === 2, 'text-gray-300': i > 2}">
+              #{{ i + 1 }}
+            </span>
           </div>
-        </li>
-      </ul>
+
+          <!-- Logo -->
+          <div class="h-24 w-24 bg-gray-100 rounded-full overflow-hidden flex items-center justify-center border border-gray-200 mb-4 shadow-sm mt-4">
+            <img [src]="getLogoUrl(team.logoUrl)" alt="{{ team.teamName }} logo" class="h-20 w-20 object-contain" *ngIf="team.logoUrl" />
+            <span *ngIf="!team.logoUrl" class="text-gray-400 font-medium text-2xl">{{ team.teamName.charAt(0) }}</span>
+          </div>
+          
+          <!-- Team Name -->
+          <h3 class="text-lg font-bold text-gray-900 mb-2 text-center truncate w-full">{{ team.teamName }}</h3>
+          
+          <!-- Vote Count -->
+          <div class="mt-auto bg-indigo-50 px-4 py-2 rounded-lg w-full text-center">
+            <p class="text-lg font-semibold text-indigo-700">{{ team.voteCount }} <span class="text-sm font-medium text-indigo-500">votes</span></p>
+          </div>
+        </div>
+      </div>
       <div *ngIf="results.length === 0" class="p-8 text-center text-gray-500">
         No teams or votes found.
       </div>

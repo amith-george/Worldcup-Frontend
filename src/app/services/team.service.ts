@@ -23,6 +23,10 @@ export class TeamService {
     return this.http.get<TeamResult[]>(url);
   }
 
+  getTeamsByPoll(pollId: number): Observable<TeamResult[]> {
+    return this.http.get<TeamResult[]>(`${this.apiUrl}/poll/${pollId}`);
+  }
+
   createTeam(teamData: FormData): Observable<any> {
     return this.http.post(this.apiUrl, teamData);
   }
